@@ -11,7 +11,7 @@ Transportation Statistics (BTS).
 - Schemas: `RAW`, `STAGING`, `ANALYTICS`
 - RAW table: `AIRLINE_DB.RAW.BTS_ONTIME_2024`
 - Loaded and date-validated RAW records: **7,079,081** across January–December 2024
-- STAGING flight table: complete; star schema, Power BI report and insights: planned
+- STAGING and ANALYTICS star schema: complete; Power BI report and insights: planned
 
 ## Planned data flow
 
@@ -57,3 +57,15 @@ denominator is operated, non-diverted flights. Cancellation and diversion
 will be reported separately.
 
 See `sql/03_staging/01_flights_clean.sql` for the SQL and validation checks.
+
+
+## Analytics model
+
+The verified star schema contains `FACT_FLIGHTS` (7,079,081 rows),
+`DIM_DATE` (366 rows), `DIM_AIRLINE` (15 rows) and `DIM_AIRPORT`
+(348 rows). Every flight matched its date, carrier, origin and
+destination dimension keys.
+
+See the [model documentation](docs/architecture/README.md) and
+[KPI definitions](docs/kpi_definitions/README.md). The SQL is in
+`sql/04_analytics/01_star_schema.sql`.
