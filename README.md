@@ -11,7 +11,7 @@ Transportation Statistics (BTS).
 - Schemas: `RAW`, `STAGING`, `ANALYTICS`
 - RAW table: `AIRLINE_DB.RAW.BTS_ONTIME_2024`
 - Loaded and date-validated RAW records: **7,079,081** across January–December 2024
-- STAGING and ANALYTICS star schema: complete; Power BI report and insights: planned
+- STAGING, ANALYTICS star schema, and SQL reporting views: complete; Power BI report and insights: planned
 
 ## Planned data flow
 

@@ -31,5 +31,20 @@ flights only, it will be a separate, explicitly named measure.
 them measures attributed minutes, not a count of flights exclusively
 caused by one category.
 
-Departure OTP will be defined after checking departure-delay
-availability for cancelled and diverted flights.
+Departure OTP is defined below using the verified BTS departure-delay fields.
+
+
+## Departure OTP
+
+| KPI | Numerator / calculation | Denominator / population |
+| --- | --- | --- |
+| Departure-eligible flights | Count rows where `CANCELLED = 0` | All non-cancelled flights, including diversions |
+| On-time departures | Count eligible rows where `DEP_DELAY < 15` | Departure-eligible flights |
+| Departure OTP % | On-time departures | Departure-eligible flights |
+
+The 2024 data has 6,982,766 departure-eligible flights. All have
+recorded `DEP_DELAY` and `DEP_DEL15` values. Of the 96,315 cancelled
+flights, 3,345 nevertheless have a departure-delay value; they remain
+excluded from departure OTP by the business rule. The view's
+`DEPARTURE_ON_TIME_FLAG` had zero mismatches with BTS's `DEP_DEL15`
+indicator among eligible flights.
