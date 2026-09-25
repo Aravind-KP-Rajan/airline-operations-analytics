@@ -1,0 +1,39 @@
+﻿-- Count missing carrier/airport codes and invalid 0/1 status flags.
+SELECT
+    COUNT(*) AS TOTAL_ROWS,
+    COUNT_IF(OP_UNIQUE_CARRIER IS NULL OR TRIM(OP_UNIQUE_CARRIER) = '')
+        AS MISSING_CARRIER,
+    COUNT_IF(ORIGIN IS NULL OR TRIM(ORIGIN) = '')
+        AS MISSING_ORIGIN,
+    COUNT_IF(DEST IS NULL OR TRIM(DEST) = '')
+        AS MISSING_DEST,
+    COUNT_IF(CANCELLED IS NULL OR CANCELLED NOT IN (0, 1))
+        AS INVALID_CANCELLED_FLAG,
+    COUNT_IF(DIVERTED IS NULL OR DIVERTED NOT IN (0, 1))
+        AS INVALID_DIVERTED_FLAG
+FROM AIRLINE_DB.RAW.BTS_ONTIME_2024;
+
+-- A CTE first counts rows per proposed flight key.
+-- The final query summarizes repeated keys and extra rows.
+WITH FLIGHT_KEYS AS (
+    SELECT
+        FL_DATE,
+        OP_UNIQUE_CARRIER,
+        OP_CARRIER_FL_NUM,
+        ORIGIN,
+        DEST,
+        CRS_DEP_TIME,
+        COUNT(*) AS ROWS_PER_KEY
+    FROM AIRLINE_DB.RAW.BTS_ONTIME_2024
+    GROUP BY
+        FL_DATE,
+        OP_UNIQUE_CARRIER,
+        OP_CARRIER_FL_NUM,
+        ORIGIN,
+        DEST,
+        CRS_DEP_TIME
+)
+SELECT
+    COUNT_IF(ROWS_PER_KEY > 1) AS REPEATED_KEYS,
+    COALESCE(SUM(ROWS_PER_KEY - 1), 0) AS EXTRA_ROWS
+FROM FLIGHT_KEYS;

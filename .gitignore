@@ -1,0 +1,21 @@
+﻿# Original and extracted flight data
+data/raw/
+data/downloads/
+data/**/*.csv
+data/**/*.zip
+data/**/*.parquet
+
+# Local credentials and private configuration
+.env
+.env.*
+!.env.example
+.snowflake/
+*.pem
+*.p8
+*.pfx
+*.key
+
+# Temporary files
+*.log
+__pycache__/
+.venv/
